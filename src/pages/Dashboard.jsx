@@ -12,9 +12,11 @@ import { Activity, TrendingUp, Shield, AlertTriangle, ChevronRight } from "lucid
 import { SectionTitle } from "../components/SectionTitle";
 import { CyberCard } from "../components/CyberCard";
 import { StatsCard } from "../components/StatsCard";
+import { AchievementBadge } from "../components/AchievementBadge";
 import { AnimatedButton } from "../components/AnimatedButton";
 import { useTheme } from "../context/ThemeContext";
 import { staggerContainer, fadeInUp } from "../animations/variants";
+import { achievementList } from "../data/achievements";
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -38,7 +40,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export const Dashboard = () => {
-  const { simulationStats, quizScores } = useTheme();
+  const { simulationStats, quizScores, achievements } = useTheme();
 
   const chartData = (quizScores || []).map((q, idx) => {
     let formattedDate = "";
@@ -85,6 +87,28 @@ export const Dashboard = () => {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* Achievement badges */}
+      <section className="mb-8">
+        <SectionTitle
+          title="Achievement Badges"
+          subtitle="Unlock badges as you complete training modules"
+          align="left"
+        />
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+        >
+          {achievementList.map((a) => (
+            <motion.div key={a.id} variants={fadeInUp}>
+              <AchievementBadge achievement={a} unlocked={achievements.includes(a.id)} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
 
       {/* User performance line */}
       <div className="mb-8">
