@@ -16,6 +16,7 @@ import { AnimatedButton } from "../components/AnimatedButton";
 import { websiteExamples } from "../data/websites";
 import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/helpers";
+import { UrlThreatAnalysis } from "../components/UrlThreatAnalysis";
 
 export const FakeWebsiteDetector = () => {
   const [selectedId, setSelectedId] = useState(websiteExamples[0].id);
@@ -137,6 +138,13 @@ export const FakeWebsiteDetector = () => {
                 </motion.div>
               )}
             </div>
+          </CyberCard>
+
+          <CyberCard>
+            <UrlThreatAnalysis
+              title="Website URL Security Analysis"
+              urls={[{ label: site.name, url: site.url }]}
+            />
           </CyberCard>
 
           {/* Inspection checklist */}
