@@ -150,7 +150,7 @@ export const analyzeUrl = (input) => {
     );
   }
 
-  if (parsed.username || parsed.password || original.includes("@") && parsed.host !== original) {
+  if (parsed.username || parsed.password) {
     addFinding(
       "userinfo",
       "Credentials embedded in URL",
