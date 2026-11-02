@@ -15,16 +15,13 @@ import {
 import { Shield, Target, Users, Award } from "lucide-react";
 import { SectionTitle } from "../components/SectionTitle";
 import { CyberCard } from "../components/CyberCard";
-import { AchievementBadge } from "../components/AchievementBadge";
 import { AnimatedButton } from "../components/AnimatedButton";
-import { achievementList } from "../data/achievements";
 import {
   phishingStats,
   scamTrends,
   threatActivity,
   weeklyTraining,
 } from "../data/dashboardData";
-import { useTheme } from "../context/ThemeContext";
 import { staggerContainer, fadeInUp } from "../animations/variants";
 import { cn } from "../utils/helpers";
 
@@ -50,8 +47,6 @@ const aboutStats = [
 ];
 
 export const About = () => {
-  const { achievements } = useTheme();
-
   const severityColor = {
     critical: "text-danger border-danger/30 bg-danger/10",
     high: "text-warning border-warning/30 bg-warning/10",
@@ -175,22 +170,6 @@ export const About = () => {
           </CyberCard>
         ))}
       </div>
-
-      {/* Achievements */}
-      <SectionTitle title="Achievement Badges" subtitle="Unlock badges as you complete training modules" />
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12"
-      >
-        {achievementList.map((a) => (
-          <motion.div key={a.id} variants={fadeInUp}>
-            <AchievementBadge achievement={a} unlocked={achievements.includes(a.id)} />
-          </motion.div>
-        ))}
-      </motion.div>
 
       {/* Tech stack */}
       <CyberCard>
