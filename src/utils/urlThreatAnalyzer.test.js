@@ -13,6 +13,7 @@ test("flags a brand lookalike domain", () => {
   const result = analyzeUrl("http://paypa1-secure-login.com/signin");
   assert.ok(result.findings.some((finding) => finding.code === "brand-lookalike"));
   assert.ok(result.score >= 30);
+  assert.ok(result.findings.some((finding) => finding.code === "insecure-http"));
 });
 
 test("flags a brand hidden in a subdomain", () => {
