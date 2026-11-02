@@ -27,15 +27,21 @@ export const AttackSimulation = () => {
   };
 
   const handleNext = () => {
-    if (!completed.includes(activeScenario)) {
-      setCompleted((c) => [...c, activeScenario]);
+    const isNewCompletion = !completed.includes(activeScenario);
+    const nextCompleted = isNewCompletion
+      ? [...completed, activeScenario]
+      : completed;
+
+    if (isNewCompletion) {
+      setCompleted(nextCompleted);
     }
+
     setActiveScenario(null);
     setStepIndex(0);
     setSelectedChoice(null);
     setShowFeedback(false);
 
-    if (completed.length + 1 >= attackScenarios.length) {
+    if (isNewCompletion && nextCompleted.length === attackScenarios.length) {
       unlockAchievement("scenario-survivor");
       incrementStat("scenariosCompleted");
     }
