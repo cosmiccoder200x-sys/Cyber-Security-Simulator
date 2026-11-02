@@ -132,6 +132,15 @@ export const analyzeUrl = (input) => {
   const normalizedLabel = normalizeLookalikes(registrableLabel);
   const topLevelDomain = hostname.split(".").at(-1) || "";
 
+  if (parsed.protocol === "http:") {
+    addFinding(
+      "insecure-http",
+      "Unencrypted HTTP connection",
+      "HTTP does not encrypt traffic in transit. Never enter passwords or payment details on an HTTP page.",
+      15
+    );
+  }
+
   if (isIpAddress(hostname)) {
     addFinding(
       "ip-host",
