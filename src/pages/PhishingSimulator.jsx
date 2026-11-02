@@ -15,6 +15,8 @@ import { AnimatedButton } from "../components/AnimatedButton";
 import { phishingEmails, phishingTacticsGuide } from "../data/phishingEmails";
 import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/helpers";
+import { extractUrls } from "../utils/urlThreatAnalyzer";
+import { UrlThreatAnalysis } from "../components/UrlThreatAnalysis";
 
 export const PhishingSimulator = () => {
   const [emailIndex, setEmailIndex] = useState(0);
@@ -156,6 +158,22 @@ export const PhishingSimulator = () => {
                 ))}
               </div>
             )}
+          </CyberCard>
+
+          <CyberCard>
+            <UrlThreatAnalysis
+              title="Email Link & Sender Analysis"
+              urls={[
+                {
+                  label: "Sender domain",
+                  url: `https://${email.from.split("@").pop()}`,
+                },
+                ...extractUrls(email.body).map((url, index) => ({
+                  label: `Email link ${index + 1}`,
+                  url,
+                })),
+              ]}
+            />
           </CyberCard>
 
           {/* User verdict */}
