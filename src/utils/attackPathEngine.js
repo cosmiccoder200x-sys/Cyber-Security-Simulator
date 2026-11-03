@@ -159,7 +159,7 @@ export const findAttackPaths = (graph, options = {}) => {
 
     if (node.type === "asset" && path.length > 1) {
       paths.push(path);
-      return;
+      if (paths.length >= maxPaths) return;
     }
 
     (adjacency.get(nodeId) || []).forEach((nextId) => {
@@ -198,7 +198,9 @@ export const rankCriticalNodes = (graph) => {
       .filter((item) => item?.type === "asset")
       .reduce((highest, asset) => Math.max(highest, clamp(asset.assetImpact, 0, 10) * 10), 0);
     const baseRisk = calculateNodeRisk(node);
-    const criticality = Math.round(baseRisk * 0.65 + downstreamImpact * 0.35);
+    const criticality = node.type === "asset"
+      ? Math.max(baseRisk, Math.round(clamp(node.assetImpact, 0, 10) * 10))
+      : Math.round(baseRisk * 0.65 + downstreamImpact * 0.35);
     return { ...node, risk: baseRisk, criticality, reachableAssets: [...reachable].filter((id) => nodeById.get(id)?.type === "asset") };
   }).sort((a, b) => b.criticality - a.criticality);
 };
