@@ -11,8 +11,7 @@ const navLinks = [
   { to: "/phishing-simulator", label: "Phishing" },
   { to: "/fake-website-detector", label: "Websites" },
   { to: "/password-analyzer", label: "Passwords" },
-  { to: "/cyber-quiz", label: "Quiz" },
-  { to: "/custom-quiz", label: "Custom Quiz" },
+  { to: "/cyber-quiz", label: "Quiz", children: [{ to: "/custom-quiz", label: "Custom Quiz" }] },
   { to: "/attack-simulation", label: "Scenarios" },
   { to: "/dashboard", label: "Dashboard" },
   { to: "/about", label: "About" },
@@ -50,21 +49,44 @@ export const Navbar = () => {
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                end={link.to === "/"}
-                className={({ isActive }) =>
-                  cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                    isActive
-                      ? "text-neon-green bg-neon-green/10"
-                      : "text-slate-400 hover:text-white hover:bg-white/5"
-                  )
-                }
-              >
-                {link.label}
-              </NavLink>
+              <div key={link.to} className={link.children ? "relative group" : undefined}>
+                <NavLink
+                  to={link.to}
+                  end={link.to === "/"}
+                  className={({ isActive }) =>
+                    cn(
+                      "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                      isActive
+                        ? "text-neon-green bg-neon-green/10"
+                        : "text-slate-400 hover:text-white hover:bg-white/5"
+                    )
+                  }
+                >
+                  {link.label}
+                </NavLink>
+                {link.children && (
+                  <div className="absolute left-0 top-full hidden min-w-44 pt-2 group-hover:block group-focus-within:block">
+                    <div className="rounded-xl border border-neon-green/15 bg-cyber-black/95 p-2 shadow-xl backdrop-blur-xl">
+                      {link.children.map((child) => (
+                        <NavLink
+                          key={child.to}
+                          to={child.to}
+                          className={({ isActive }) =>
+                            cn(
+                              "block rounded-lg px-3 py-2 text-sm transition-colors",
+                              isActive
+                                ? "bg-neon-green/10 text-neon-green"
+                                : "text-slate-400 hover:bg-white/5 hover:text-white"
+                            )
+                          }
+                        >
+                          {child.label}
+                        </NavLink>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
@@ -150,22 +172,40 @@ export const Navbar = () => {
                 </div>
               )}
               {navLinks.map((link) => (
-                <NavLink
-                  key={link.to}
-                  to={link.to}
-                  end={link.to === "/"}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    cn(
-                      "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
-                      isActive
-                        ? "text-neon-green bg-neon-green/10"
-                        : "text-slate-400 hover:text-white hover:bg-white/5"
-                    )
-                  }
-                >
-                  {link.label}
-                </NavLink>
+                <div key={link.to}>
+                  <NavLink
+                    to={link.to}
+                    end={link.to === "/"}
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                        isActive
+                          ? "text-neon-green bg-neon-green/10"
+                          : "text-slate-400 hover:text-white hover:bg-white/5"
+                      )
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                  {link.children?.map((child) => (
+                    <NavLink
+                      key={child.to}
+                      to={child.to}
+                      onClick={() => setMobileOpen(false)}
+                      className={({ isActive }) =>
+                        cn(
+                          "ml-4 block rounded-lg border-l-2 px-4 py-2 text-sm transition-colors",
+                          isActive
+                            ? "border-neon-green text-neon-green"
+                            : "border-slate-700 text-slate-400 hover:border-neon-green/50 hover:text-white"
+                        )
+                      }
+                    >
+                      {child.label}
+                    </NavLink>
+                  ))}
+                </div>
               ))}
             </div>
           </motion.div>
