@@ -6,6 +6,7 @@ import { AnimatedButton } from "../components/AnimatedButton";
 import { QuizCard } from "../components/QuizCard";
 import { quizQuestions } from "../data/quizQuestions";
 import { useTheme } from "../context/ThemeContext";
+import { calculateQuizResult, formatQuizTime, validateQuizDraft } from "../utils/customQuiz";
 
 const STORAGE_KEY = "cyber-custom-quizzes";
 const readQuizzes = () => {
@@ -24,8 +25,6 @@ const createEmptyForm = () => ({
   timeLimit: 5,
   passingScore: 70,
 });
-
-const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
 export const CustomQuizBuilder = () => {
   const [quizzes, setQuizzes] = useState(readQuizzes);
@@ -70,15 +69,9 @@ export const CustomQuizBuilder = () => {
 
   const saveQuiz = (event) => {
     event.preventDefault();
+    const validationError = validateQuizDraft(form);
+    if (validationError) return setFormError(validationError);
     const title = form.title.trim();
-    if (!title) return setFormError("Enter a quiz title.");
-    if (form.questionIds.length === 0) return setFormError("Select at least one question.");
-    if (!Number.isInteger(Number(form.timeLimit)) || Number(form.timeLimit) < 1 || Number(form.timeLimit) > 60) {
-      return setFormError("Time limit must be between 1 and 60 minutes.");
-    }
-    if (!Number.isFinite(Number(form.passingScore)) || Number(form.passingScore) < 0 || Number(form.passingScore) > 100) {
-      return setFormError("Passing score must be between 0 and 100.");
-    }
 
     const quiz = {
       id: editingId || (window.crypto?.randomUUID?.() ?? `quiz-${Date.now()}`),
@@ -123,13 +116,8 @@ export const CustomQuizBuilder = () => {
   const finishAttempt = (timedOut = false) => {
     if (!attemptQuiz || submittedRef.current) return;
     submittedRef.current = true;
-    const correct = attemptQuiz.questions.reduce(
-      (total, question) => total + (answers[question.id] === question.correct ? 1 : 0),
-      0
-    );
-    const total = attemptQuiz.questions.length;
-    const percentage = Math.round((correct / total) * 100);
-    setResult({ correct, total, percentage, passed: percentage >= attemptQuiz.passingScore, timedOut });
+    const score = calculateQuizResult(attemptQuiz.questions, answers, attemptQuiz.passingScore);
+    setResult({ ...score, timedOut });
     recordQuizScore(correct, total);
   };
 
@@ -202,7 +190,7 @@ export const CustomQuizBuilder = () => {
         <div className="flex justify-between items-center mb-6 gap-4">
           <button onClick={leaveAttempt} className="text-slate-400 hover:text-white text-sm">← Exit quiz</button>
           <span className={timeLeft <= 30 ? "text-danger font-mono text-lg" : "text-neon-green font-mono text-lg"}>
-            <Clock3 className="inline mr-2" size={18} />{formatTime(timeLeft)}
+            <Clock3 className="inline mr-2" size={18} />{formatQuizTime(timeLeft)}
           </span>
           <span className="text-slate-400 text-sm">{current + 1}/{attemptQuiz.questions.length}</span>
         </div>
