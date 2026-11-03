@@ -12,6 +12,7 @@ const navLinks = [
   { to: "/fake-website-detector", label: "Websites" },
   { to: "/password-analyzer", label: "Passwords" },
   { to: "/cyber-quiz", label: "Quiz" },
+  { to: "/custom-quiz", label: "Custom Quiz" },
   { to: "/attack-simulation", label: "Scenarios" },
   { to: "/dashboard", label: "Dashboard" },
   { to: "/about", label: "About" },
