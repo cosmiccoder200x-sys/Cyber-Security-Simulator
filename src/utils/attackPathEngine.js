@@ -123,7 +123,18 @@ export const findCycles = (graph) => {
 
 export const findDisconnectedNodes = (graph) => {
   const nodes = getNodes(graph);
-  const adjacency = buildAdjacencyList(graph);
+  const nodeIds = new Set(nodes.filter((node) => node?.id).map((node) => node.id));
+  const adjacency = new Map([...nodeIds].map((id) => [id, []]));
+  const seenEdges = new Set();
+
+  getEdges(graph).forEach((edge) => {
+    if (!nodeIds.has(edge?.from) || !nodeIds.has(edge?.to)) return;
+    const key = `${edge.from}->${edge.to}`;
+    if (seenEdges.has(key)) return;
+    seenEdges.add(key);
+    adjacency.get(edge.from).push(edge.to);
+  });
+
   const entries = nodes.filter((node) => node.type === "entry");
   if (!entries.length) return nodes.map((node) => node.id);
 
