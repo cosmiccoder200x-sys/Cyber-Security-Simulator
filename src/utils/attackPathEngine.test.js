@@ -84,3 +84,22 @@ test("returns no paths when there is no entry node", () => {
   assert.deepEqual(findAttackPaths(sample), []);
   assert.deepEqual(findDisconnectedNodes(sample), ["weakness", "db"]);
 });
+
+test("continues through a compromised asset to discover a second asset", () => {
+  const sample = graph(
+    [node("entry", "entry"), node("weakness", "vulnerability"), node("server", "asset"), node("pivot", "technique"), node("database", "asset")],
+    [{ from: "entry", to: "weakness" }, { from: "weakness", to: "server" }, { from: "server", to: "pivot" }, { from: "pivot", to: "database" }]
+  );
+  assert.deepEqual(findAttackPaths(sample), [
+    ["entry", "weakness", "server"],
+    ["entry", "weakness", "server", "pivot", "database"],
+  ]);
+});
+
+test("handles an empty graph without throwing", () => {
+  const empty = graph([], []);
+  assert.deepEqual(findAttackPaths(empty), []);
+  assert.deepEqual(findCycles(empty), []);
+  assert.deepEqual(findDisconnectedNodes(empty), []);
+  assert.deepEqual(validateAttackGraph(empty), []);
+});
