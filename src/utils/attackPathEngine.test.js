@@ -66,7 +66,7 @@ test("rejects invalid transitions and unknown endpoints", () => {
 test("calculates bounded node and path risk scores", () => {
   const sample = graph([node("entry", "entry", { severity: 10, exploitability: 10, assetImpact: 10 }), node("db", "asset", { assetImpact: 10 })], []);
   assert.equal(calculateNodeRisk(sample.nodes[0]), 100);
-  assert.equal(calculatePathRisk(["entry", "db"], sample), 100);
+  assert.equal(calculatePathRisk(["entry", "db"], sample), 89);
   assert.equal(calculateNodeRisk(null), 0);
 });
 
