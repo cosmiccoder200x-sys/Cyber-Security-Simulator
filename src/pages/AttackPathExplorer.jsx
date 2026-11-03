@@ -153,7 +153,7 @@ export const AttackPathExplorer = () => {
                     aria-pressed={selected}
                     onClick={() => selectNode(node.id)}
                     onKeyDown={(event) => handleNodeKeyDown(event, node.id)}
-                    className="cursor-pointer outline-none"
+                    className="group cursor-pointer outline-none"
                   >
                     <rect
                       x={node.x - 74}
@@ -173,7 +173,7 @@ export const AttackPathExplorer = () => {
                       {style.label} · {risk}/100
                     </text>
                     {disconnected && <text x={node.x} y={node.y + 27} fill="#fbbf24" fontSize="8" textAnchor="middle">UNREACHABLE</text>}
-                    <rect x={node.x - 74} y={node.y - 38} width="148" height="76" rx="12" fill="transparent" stroke="transparent" className="focus-visible:stroke-white" />
+                    <rect x={node.x - 74} y={node.y - 38} width="148" height="76" rx="12" fill="transparent" stroke="transparent" className="group-focus-visible:stroke-white" />
                   </g>
                 );
               })}
