@@ -118,7 +118,7 @@ export const CustomQuizBuilder = () => {
     submittedRef.current = true;
     const score = calculateQuizResult(attemptQuiz.questions, answers, attemptQuiz.passingScore);
     setResult({ ...score, timedOut });
-    recordQuizScore(correct, total);
+    recordQuizScore(score.correct, score.total);
   };
 
   useEffect(() => {
