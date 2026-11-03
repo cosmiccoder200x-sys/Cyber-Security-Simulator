@@ -5,6 +5,7 @@ import { PhishingSimulator } from "../pages/PhishingSimulator";
 import { FakeWebsiteDetector } from "../pages/FakeWebsiteDetector";
 import { PasswordAnalyzer } from "../pages/PasswordAnalyzer";
 import { CyberQuiz } from "../pages/CyberQuiz";
+import { CustomQuizBuilder } from "../pages/CustomQuizBuilder";
 import { AttackSimulation } from "../pages/AttackSimulation";
 import { Dashboard } from "../pages/Dashboard";
 import { About } from "../pages/About";
@@ -18,6 +19,7 @@ export const AppRoutes = () => (
       <Route path="fake-website-detector" element={<FakeWebsiteDetector />} />
       <Route path="password-analyzer" element={<PasswordAnalyzer />} />
       <Route path="cyber-quiz" element={<CyberQuiz />} />
+      <Route path="custom-quiz" element={<CustomQuizBuilder />} />
       <Route path="attack-simulation" element={<AttackSimulation />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="about" element={<About />} />
